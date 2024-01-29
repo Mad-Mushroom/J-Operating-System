@@ -49,7 +49,7 @@ typedef unsigned long long uint_64;
 ▉
 ▄
 
-*/
+
 
 char[] M_constToArray(const char* str){
 	uint_8* charPtr = (uint_8*)str;
@@ -65,4 +65,4 @@ char[] M_constToArray(const char* str){
     	charPtr++;
   	}
   	return chr;
-}
+}*/

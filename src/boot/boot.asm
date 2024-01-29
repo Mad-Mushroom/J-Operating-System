@@ -69,7 +69,6 @@ GDT_descriptor:
     dw GDT_end - GDT_start - 1
     dd GDT_start
 
-
 [bits 32]
 start_protected_mode:
     mov ax, DATA_SEG

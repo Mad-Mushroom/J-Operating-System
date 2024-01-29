@@ -6,7 +6,7 @@ uint_8 selection;
 
 void U_MainMenu(){
 	D_PrintChar(205);
-	D_Locate((D_VGA_WIDTH-25)/2, 4, test, M_BACKGROUND_BLUE | M_FOREGROUND_WHITE);
+	D_Locate((D_VGA_WIDTH-25)/2, 4, "==========OneOS=========", M_BACKGROUND_BLUE | M_FOREGROUND_WHITE);
 	D_Locate((D_VGA_WIDTH-25)/2, 5, "|                      |", M_BACKGROUND_BLUE | M_FOREGROUND_WHITE);
 	D_Locate((D_VGA_WIDTH-25)/2, 6, "|                      |", M_BACKGROUND_BLUE | M_FOREGROUND_WHITE);
 	D_Locate((D_VGA_WIDTH-25)/2, 7, "|                      |", M_BACKGROUND_BLUE | M_FOREGROUND_WHITE);
