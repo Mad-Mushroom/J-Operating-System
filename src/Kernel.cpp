@@ -1,12 +1,9 @@
 #include "Kernel.h"
 
-void BootScreen(){
+void init(){
 	ClearScreen(BACKGROUND_BLACK | FOREGROUND_WHITE);
 	SetCursorPosition(0);
 	PrintString("Starting J Operating System...\n", BACKGROUND_BLACK | FOREGROUND_WHITE);
-}
-
-void init(){
 	InitializeIDT();
 	PrintString("\nInitialized IDT.");
 	MainKeyboardHandler = KeyboardHandler;
@@ -29,15 +26,7 @@ void shutdown(){
 }
 
 extern "C" void _start() {
-	BootScreen();
 	init();
 	RunShell();
-
-	MemoryMapEntry** UsableMemory = GetUsableMemoryRegions();
-
-	/*for(uint_8 i = 0; i < UsableMemoryRegionsCount; i++){
-		MemoryMapEntry* memMap = UsableMemoryMaps[i];
-		PrintMemoryMap(memMap);
-	}*/
 	return;
 }
