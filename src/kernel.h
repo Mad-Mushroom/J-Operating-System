@@ -2,6 +2,11 @@
 
 void shutdown();
 
+extern const char Logo[];
+extern const char HelpText[];
+extern const char LicenseText[];
+extern const char CommandsText[];
+
 /* Misc */
 #include "misc/KBScanCodeSet1.h"
 #include "misc/TextModeColorCodes.h"

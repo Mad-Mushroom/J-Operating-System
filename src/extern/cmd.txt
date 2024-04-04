@@ -1,0 +1,9 @@
+jOS Commands
+------------
+
+shutdown - shut down the PC
+echo - say all arguments after command
+clear - clear the screen
+help - display help
+cmd - display this
+license - display license of the OS

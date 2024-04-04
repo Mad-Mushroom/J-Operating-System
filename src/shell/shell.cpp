@@ -32,6 +32,9 @@ void ParseCommand(){
     if(strcmp(arguments[0], "shutdown")) shutdown();
     if(strcmp(arguments[0], "echo")) { for(int i=1; i<15; i++) { PrintString(arguments[i]); PrintChar(' '); } PrintString("\n"); }
     if(strcmp(arguments[0], "clear")) ClearScreen();
+    if(strcmp(arguments[0], "help")) PrintString(HelpText);
+    if(strcmp(arguments[0], "cmd") || strcmp(arguments[0], "commands")) PrintString(CommandsText);
+    if(strcmp(arguments[0], "license")) PrintString(LicenseText);
 
     /* DEBUG */
     if(strcmp(arguments[0], "dprintmem")){

@@ -1,5 +1,10 @@
 #include "Kernel.h"
 
+extern const char Logo[];
+extern const char HelpText[];
+extern const char LicenseText[];
+extern const char CommandsText[];
+
 void init(){
 	ClearScreen(BACKGROUND_BLACK | FOREGROUND_WHITE);
 	SetCursorPosition(0);
