@@ -9,7 +9,6 @@
 uint_16 CursorPosition;
 
 void SetCursorPosition(uint_16 position){
-
   outb(0x3D4, 0x0F);
   outb(0x3D5, (uint_8)(position & 0xFF));
   outb(0x3D4, 0x0E);

@@ -16,6 +16,13 @@ void RunShell(){
     PrintString("jOS> ");
 }
 
+void Shell_DrawBackground(){
+    uint_16 oCursorPosition = CursorPosition;
+    SetCursorPosition(0);
+    PrintString(BackgroundASCII, BACKGROUND_BLACK | FOREGROUND_DARKGRAY);
+    SetCursorPosition(oCursorPosition);
+}
+
 void ParseCommand(){
     char arguments[16][64];
     uint_16 index;
@@ -29,12 +36,45 @@ void ParseCommand(){
         index2++;
     }
 
-    if(strcmp(arguments[0], "shutdown")) shutdown();
-    if(strcmp(arguments[0], "echo")) { for(int i=1; i<15; i++) { PrintString(arguments[i]); PrintChar(' '); } PrintString("\n"); }
-    if(strcmp(arguments[0], "clear")) ClearScreen();
-    if(strcmp(arguments[0], "help")) PrintString(HelpText);
-    if(strcmp(arguments[0], "cmd") || strcmp(arguments[0], "commands")) PrintString(CommandsText);
-    if(strcmp(arguments[0], "license")) PrintString(LicenseText);
+    if(strcmp(arguments[0], "shutdown")){
+        shutdown();
+        Shell_bufferSize = 0; memset(arguments, 0, sizeof(arguments));
+        return;
+    }
+    if(strcmp(arguments[0], "echo")){
+        for(int i=1; i<15; i++){
+            PrintString(arguments[i]);
+            PrintChar(' ');
+        }
+        PrintString("\n");
+        Shell_bufferSize = 0; memset(arguments, 0, sizeof(arguments));
+        return;
+    }
+    if(strcmp(arguments[0], "clear")){
+        ClearScreen(); Shell_DrawBackground();
+        Shell_bufferSize = 0; memset(arguments, 0, sizeof(arguments));
+        return;
+    }
+    if(strcmp(arguments[0], "help")){
+        PrintString(HelpText);
+        Shell_bufferSize = 0; memset(arguments, 0, sizeof(arguments));
+        return;
+    }
+    if(strcmp(arguments[0], "cmd") || strcmp(arguments[0], "commands")){
+        PrintString(CommandsText);
+        Shell_bufferSize = 0; memset(arguments, 0, sizeof(arguments));
+        return;
+    }
+    if(strcmp(arguments[0], "license")){
+        PrintString(LicenseText);
+        Shell_bufferSize = 0; memset(arguments, 0, sizeof(arguments));
+        return;
+    }
+    if(strcmp(arguments[0], "info")){
+        PrintString(OS_VERSION); PrintString("\n");
+        Shell_bufferSize = 0; memset(arguments, 0, sizeof(arguments));
+        return;
+    }
 
     /* DEBUG */
     if(strcmp(arguments[0], "dprintmem")){
@@ -43,10 +83,23 @@ void ParseCommand(){
 		    MemoryMapEntry* memMap = UsableMemoryMaps[i];
 		    PrintMemoryMap(memMap);
 	    }
+        Shell_bufferSize = 0; memset(arguments, 0, sizeof(arguments));
+        return;
+    }
+    if(strcmp(arguments[0], "dpanic")){
+        kpanic(arguments[1]);
+        Shell_bufferSize = 0; memset(arguments, 0, sizeof(arguments));
+        return;
+    }
+    if(strcmp(arguments[0], "derr")){
+        ncErr(arguments[1]);
+        Shell_bufferSize = 0; memset(arguments, 0, sizeof(arguments));
+        return;
     }
 
-    Shell_bufferSize = 0;
-    memset(arguments, 0, sizeof(arguments));
+    PrintString("Command or Binary not recognized!\n");
+    Shell_bufferSize = 0; memset(arguments, 0, sizeof(arguments));
+    return;
 }
 
 void Shell_KeyPress(uint_8 scanCode, uint_8 chr){

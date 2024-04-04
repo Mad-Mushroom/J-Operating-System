@@ -4,6 +4,7 @@ extern const char Logo[];
 extern const char HelpText[];
 extern const char LicenseText[];
 extern const char CommandsText[];
+extern const char BackgroundASCII[];
 
 void init(){
 	ClearScreen(BACKGROUND_BLACK | FOREGROUND_WHITE);
@@ -20,6 +21,15 @@ void init(){
 	PrintString("\nDone Initializing.\n\n");
 }
 
+void StartScreen(){
+	ClearScreen();
+	Shell_DrawBackground();
+	PrintString(Logo);
+	PrintString(OS_VERSION);
+	PrintString("\nCopyright (c) 2024 MadMushroom\n\n");
+    //PrintString("\n----------------------------------------\n");
+}
+
 void shutdown(){
 	ClearScreen(BACKGROUND_BLACK | FOREGROUND_YELLOW);
 	SetCursorPosition(PositionFromCoords(VGA_WIDTH/2-(40/2)-1, VGA_HEIGHT/2));
@@ -32,6 +42,7 @@ void shutdown(){
 
 extern "C" void _start() {
 	init();
+	StartScreen();
 	RunShell();
 	return;
 }

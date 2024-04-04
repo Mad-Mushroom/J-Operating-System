@@ -6,6 +6,9 @@ extern const char Logo[];
 extern const char HelpText[];
 extern const char LicenseText[];
 extern const char CommandsText[];
+extern const char BackgroundASCII[];
+
+#define OS_VERSION "J Operating System Alpha [v0.1.0]"
 
 /* Misc */
 #include "misc/KBScanCodeSet1.h"

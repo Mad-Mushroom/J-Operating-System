@@ -11,6 +11,8 @@ typedef unsigned short uint_16;
 typedef unsigned int uint_32;
 typedef unsigned long long uint_64;
 
+bool Shell_pausedE = false;
+
 uint_16 pCursorPosition;
 
 void poutb(unsigned short port, unsigned char val){
@@ -64,7 +66,6 @@ void kpanic(const char* msg){
 }
 
 void ncErr(const char* msg){
-  //ClearScreen(0x0F | 0x90);
   uint_64 ClearColor = 0x0F | 0x90;
   uint_64 value =0;
   value += ClearColor << 8;
@@ -75,12 +76,12 @@ void ncErr(const char* msg){
     *i = value;
   }
   poutb(0x3D4, 0x0F);
-  poutb(0x3D5, (uint_8)((pVGA_WIDTH*pVGA_HEIGHT) & 0xFF));
+  poutb(0x3D5, (uint_8)(0 & 0xFF));
   poutb(0x3D4, 0x0E);
-  poutb(0x3D5, (uint_8)(((pVGA_WIDTH*pVGA_HEIGHT) >> 8) & 0xFF));
+  poutb(0x3D5, (uint_8)((0 >> 8) & 0xFF));
   pPrintString("Non critical System Error occured.\n\n", 0x0F | 0x90);
   pPrintString("Details:\n", 0x0F | 0x90);
   pPrintString(msg, 0x0F | 0x90);
   pPrintString("\n\n", 0x0F | 0x90);
-  pPrintString("Press Enter to continue.", 0x0F | 0x90);
+  //CursorPosition = pCursorPosition;
 }
