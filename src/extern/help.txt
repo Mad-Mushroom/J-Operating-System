@@ -1,7 +1,13 @@
 jOS Help
 --------
 
-bla bla bla
-shut up,
-nobody is as dumb as this
-...
+In the line above, you can see information about the system.
+In the line below, you can type in commands.
+
+Commands are always:
+COMMAND ARGUMENT1 ARGUMENT2 ARGUMENT3 ...
+
+Just seperate the command and the arguments with spaces and press [ENTER].
+If you press [ENTER], the command will execute, with the arguments you entered.
+
+For a list of avaible commands, use 'cmd' or 'commands'.

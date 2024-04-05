@@ -14,6 +14,8 @@ extern uint_8 MemoryRegionCount;
 
 uint_8 UsableMemoryRegionsCount;
 
+uint_32 TotalMemoryLength;
+
 MemoryMapEntry* UsableMemoryMaps[10];
 
 void PrintMemoryMap(MemoryMapEntry* memoryMap, uint_16 position = CursorPosition){
@@ -35,6 +37,7 @@ MemoryMapEntry** GetUsableMemoryRegions(){
         if(memMap->RegionType == 1){
             UsableMemoryMaps[UsableRegionIndex] = memMap;
             UsableRegionIndex++;
+            TotalMemoryLength += memMap->RegionLength;
         }
     }
     UsableMemoryRegionsCount = UsableRegionIndex;

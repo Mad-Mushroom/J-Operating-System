@@ -8,4 +8,4 @@ x86_64-elf-ld -T"src/link.ld"
 
 cat bin/bootloader.bin bin/kernel.bin > bin/jOS.bin
 
-qemu-system-x86_64 -drive format=raw,file="bin/jOS.bin",index=0,if=floppy,  -m 128M
+qemu-system-x86_64 -drive format=raw,file="bin/jOS.bin",index=0,if=floppy,  -m 1M

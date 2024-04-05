@@ -87,9 +87,10 @@ void ncErr(const char* msg){
   poutb(0x3D5, (uint_8)(0 & 0xFF));
   poutb(0x3D4, 0x0E);
   poutb(0x3D5, (uint_8)((0 >> 8) & 0xFF));
+  pCursorPosition = 0;
   pPrintString("Non critical System Error occured.\n\n", 0x0F | 0x90);
   pPrintString("Details:\n", 0x0F | 0x90);
   pPrintString(msg, 0x0F | 0x90);
   pPrintString("\n\n", 0x0F | 0x90);
-  //CursorPosition = pCursorPosition;
+  pPrintString("Press Enter to continue.", 0x0F | 0x90);
 }

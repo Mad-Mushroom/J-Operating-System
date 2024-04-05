@@ -2,18 +2,32 @@
 
 #include "../Kernel.h"
 
+#define SHELL_VERSION "jShell [v0.2.4]"
+
 bool Shell_LeftShiftPressed = false;
 bool Shell_RightShiftPressed = false;
 char Shell_commandBuffer[512];
 uint_16 Shell_bufferSize;
+uint_16 Shell_CursorPosition;
 
-void initShell(){
+void Shell_Init(){
     Shell_bufferSize = 0;
     for(int i=0; i<512; i++) Shell_commandBuffer[i] = 0;
+    Shell_CursorPosition = VGA_WIDTH;
 }
 
-void RunShell(){
-    PrintString("jOS> ");
+void Shell_Run(){
+    SetCursorPosition((VGA_HEIGHT - 1) * VGA_WIDTH);
+    PrintString("jOS>                                                                            ", BACKGROUND_LIGHTGRAY | FOREGROUND_BLUE);
+    SetCursorPosition(((VGA_HEIGHT - 1) * VGA_WIDTH) + 5);
+}
+
+void Shell_Output(const char* str, uint_8 color = DEFAULT_BACKGROUND | DEFAULT_FOREGROUND){
+    uint_16 oCursorPosition = CursorPosition;
+    SetCursorPosition(Shell_CursorPosition);
+    PrintString(str, color);
+    Shell_CursorPosition = CursorPosition;
+    SetCursorPosition(oCursorPosition);
 }
 
 void Shell_DrawBackground(){
@@ -23,7 +37,15 @@ void Shell_DrawBackground(){
     SetCursorPosition(oCursorPosition);
 }
 
-void ParseCommand(){
+void Shell_Clear(){
+    ClearScreen();
+    Shell_CursorPosition = VGA_WIDTH;
+    Shell_DrawBackground();
+    PrintString(OS_VERSION, BACKGROUND_BLUE | FOREGROUND_YELLOW);
+    PrintString("             Copyright (c) 2024 MadMushroom\n", BACKGROUND_BLUE | FOREGROUND_YELLOW);
+}
+
+void Shell_ParseCommand(){
     char arguments[16][64];
     uint_16 index;
     uint_16 index2;
@@ -43,47 +65,83 @@ void ParseCommand(){
     }
     if(strcmp(arguments[0], "echo")){
         for(int i=1; i<15; i++){
-            PrintString(arguments[i]);
-            PrintChar(' ');
+            Shell_Output(arguments[i]);
+            Shell_Output(" ");
         }
-        PrintString("\n");
+        //PrintString("\n");
         Shell_bufferSize = 0; memset(arguments, 0, sizeof(arguments));
         return;
     }
     if(strcmp(arguments[0], "clear")){
-        ClearScreen(); Shell_DrawBackground();
+        Shell_Clear();
         Shell_bufferSize = 0; memset(arguments, 0, sizeof(arguments));
         return;
     }
     if(strcmp(arguments[0], "help")){
-        PrintString(HelpText);
+        Shell_Output(HelpText);
         Shell_bufferSize = 0; memset(arguments, 0, sizeof(arguments));
         return;
     }
     if(strcmp(arguments[0], "cmd") || strcmp(arguments[0], "commands")){
-        PrintString(CommandsText);
+        Shell_Output(CommandsText);
+        Shell_bufferSize = 0; memset(arguments, 0, sizeof(arguments));
+        return;
+    }
+    if(strcmp(arguments[0], "ucmd")){
+        Shell_Output("jOS (undocumented) Commands\n");
+        Shell_Output("---------------------------\n\n");
+        Shell_Output("start - display start screen\n");
+        Shell_Output("dpmem - output memory information\n");
+        Shell_Output("dpanic - trigger kernel panic\n");
+        Shell_Output("derr - trigger non-critical system error\n");
+        Shell_Output("ucmd - display this\n");
         Shell_bufferSize = 0; memset(arguments, 0, sizeof(arguments));
         return;
     }
     if(strcmp(arguments[0], "license")){
-        PrintString(LicenseText);
+        Shell_Output(LicenseText);
         Shell_bufferSize = 0; memset(arguments, 0, sizeof(arguments));
         return;
     }
-    if(strcmp(arguments[0], "info")){
-        PrintString(OS_VERSION); PrintString("\n");
+    if(strcmp(arguments[0], "info") || strcmp(arguments[0], "neofetch")){
+        Shell_Output("\n");
+        Shell_Output("            /$$$$$$   /$$$$$$     "); Shell_Output("OS: The J Operating System"); Shell_Output("\n");
+        Shell_Output("           /$$__  $$ /$$__  $$    "); Shell_Output("Kernel: jKern - jOS"); Shell_Output("\n");
+        Shell_Output("       /$$| $$  \\ $$| $$  \\__/    "); Shell_Output("Version: "); Shell_Output(OS_VERSION);
+        Shell_Output("      |__/| $$  | $$|  $$$$$$     "); Shell_Output("Build Date: "); Shell_Output(OS_BUILD_DATE); Shell_Output("\n");
+        Shell_Output("       /$$| $$  | $$ \\____  $$    "); Shell_Output("Memory: "); Shell_Output("\n");
+        Shell_Output("      | $$| $$  | $$ /$$  \\ $$    "); Shell_Output("Uptime: "); Shell_Output("\n");
+        Shell_Output("      | $$|  $$$$$$/|  $$$$$$/    "); Shell_Output("CMOS Time: "); Shell_Output("\n");
+        Shell_Output("      | $$ \\______/  \\______/     "); Shell_Output("Shell: "); Shell_Output(SHELL_VERSION); Shell_Output("\n");
+        Shell_Output(" /$$  | $$                        "); Shell_Output("Resolution: "); Shell_Output(IntegerToString(VGA_WIDTH)); Shell_Output("x"); Shell_Output(IntegerToString(VGA_HEIGHT)); Shell_Output(""); Shell_Output("\n");
+        Shell_Output("|  $$$$$$/                        "); Shell_Output("  ", 0x00 | BACKGROUND_BLACK);Shell_Output("  ", 0x00 | BACKGROUND_BLUE);Shell_Output("  ", 0x00 | BACKGROUND_GREEN);Shell_Output("  ", 0x00 | BACKGROUND_CYAN);Shell_Output("  ", 0x00 | BACKGROUND_RED);Shell_Output("  ", 0x00 | BACKGROUND_MAGENTA);Shell_Output("  ", 0x00 | BACKGROUND_BROWN);Shell_Output("  ", 0x00 | BACKGROUND_LIGHTGRAY);Shell_Output("\n");
+        Shell_Output(" \\______/                         "); Shell_Output("  ", 0x00 | BACKGROUND_BLINKINGBLACK);Shell_Output("  ", 0x00 | BACKGROUND_BLINKINGBLUE);Shell_Output("  ", 0x00 | BACKGROUND_BLINKINGGREEN);Shell_Output("  ", 0x00 | BACKGROUND_BLINKINGCYAN);Shell_Output("  ", 0x00 | BACKGROUND_BLINKINGRED);Shell_Output("  ", 0x00 | BACKGROUND_BLINKINGMAGENTA);Shell_Output("  ", 0x00 | BACKGROUND_BLINKINGYELLOW);Shell_Output("  ", 0x00 | BACKGROUND_BLINKINGWHITE);
+        Shell_bufferSize = 0; memset(arguments, 0, sizeof(arguments));
+        return;
+    }
+    if(strcmp(arguments[0], "start")){
+        Shell_Output(Logo);
         Shell_bufferSize = 0; memset(arguments, 0, sizeof(arguments));
         return;
     }
 
     /* DEBUG */
-    if(strcmp(arguments[0], "dprintmem")){
+    if(strcmp(arguments[0], "dpmem")){
+        Shell_Output("Memory Regions: "); Shell_Output(IntegerToString(MemoryRegionCount)); Shell_Output("\n");
+        //Shell_Output("Usable Memory Regions: "); Shell_Output(IntegerToString(UsableMemoryRegionsCount)); Shell_Output("\n");
+        Shell_Output("\n");
         MemoryMapEntry** UsableMemory = GetUsableMemoryRegions();
 	    for(uint_8 i = 0; i < UsableMemoryRegionsCount; i++){
 		    MemoryMapEntry* memMap = UsableMemoryMaps[i];
-		    PrintMemoryMap(memMap);
+		    Shell_Output("Memory Base: "); Shell_Output(IntegerToString(memMap->BaseAddress)); Shell_Output("\n");
+            Shell_Output("Region Length: "); Shell_Output(IntegerToString(memMap->RegionLength)); Shell_Output("\n");
+            Shell_Output("Memory Type: "); Shell_Output(IntegerToString(memMap->RegionType)); Shell_Output("\n");
+            Shell_Output("Memory Attributes: "); Shell_Output(IntegerToString(memMap->ExtendedAttributes)); Shell_Output("\n");
 	    }
         Shell_bufferSize = 0; memset(arguments, 0, sizeof(arguments));
+        Shell_Output("\n"); Shell_Output("Memory: "); Shell_Output(IntegerToString(TotalMemoryLength));
+        Shell_Output("\n"); Shell_Output("Memory: "); Shell_Output(IntegerToString(TotalMemoryLength / 1000)); Shell_Output("k");
+        Shell_Output("\n"); Shell_Output("Memory: "); Shell_Output(IntegerToString(TotalMemoryLength / 1000000)); Shell_Output("M");
         return;
     }
     if(strcmp(arguments[0], "dpanic")){
@@ -97,38 +155,21 @@ void ParseCommand(){
         return;
     }
 
-    if(arguments[0] != "") PrintString("Command or Binary not recognized!\n");
+    if(Shell_bufferSize != 0) Shell_Output("Command or Binary not recognized!\n");
     Shell_bufferSize = 0; memset(arguments, 0, sizeof(arguments));
     return;
 }
 
 void Shell_KeyPress(uint_8 scanCode, uint_8 chr){
-    if (chr != 0) {
-		switch (Shell_LeftShiftPressed | Shell_RightShiftPressed)
-		{
-		case true:
-			Shell_commandBuffer[Shell_bufferSize] = chr;
-            Shell_bufferSize++;
-            PrintChar(chr - 32);
-			break;
-		case false:
-			Shell_commandBuffer[Shell_bufferSize] = chr;
-            Shell_bufferSize++;
-            PrintChar(chr);
-			break;
-		}
-
-	}
-	else {
-		switch (scanCode) {
+    if (chr == 0) {
+        switch (scanCode) {
 		case 0x8E: //Backspace
 			if(Shell_bufferSize > 0){
                 Shell_commandBuffer[Shell_bufferSize-1] = 0;
                 Shell_bufferSize--;
                 SetCursorPosition(CursorPosition-1);
-                PrintChar(' ');
+                PrintChar(' ', BACKGROUND_LIGHTGRAY | FOREGROUND_BLUE);
                 SetCursorPosition(CursorPosition-1);
-                //PrintString(IntegerToString(shell.bufferSize));
             }
 			break;
 		case 0x2A: //Left Shift
@@ -136,6 +177,7 @@ void Shell_KeyPress(uint_8 scanCode, uint_8 chr){
 			break;
 		case 0xAA: //Left Shift Released
 			Shell_LeftShiftPressed = false;
+            break;
 		case 0x36: //Right Shift
 			Shell_RightShiftPressed = true;
 			break;
@@ -144,8 +186,24 @@ void Shell_KeyPress(uint_8 scanCode, uint_8 chr){
 			break;
 		case 0x9C: //Enter
 			PrintString("\n");
-            ParseCommand();
-            RunShell();
+            Shell_Clear();
+            Shell_ParseCommand();
+            Shell_Run();
+			break;
+		}
+	}
+	else {
+		switch (Shell_LeftShiftPressed | Shell_RightShiftPressed)
+		{
+		case true:
+			Shell_commandBuffer[Shell_bufferSize] = chr - 32;
+            Shell_bufferSize++;
+            PrintChar(chr - 32, BACKGROUND_LIGHTGRAY | FOREGROUND_BLUE);
+			break;
+		case false:
+			Shell_commandBuffer[Shell_bufferSize] = chr;
+            Shell_bufferSize++;
+            PrintChar(chr, BACKGROUND_LIGHTGRAY | FOREGROUND_BLUE);
 			break;
 		}
 	}

@@ -7,7 +7,7 @@
   %1_size: dq %1_size - %1
 %endmacro
 
-IncBin Logo, "src/extern/logo.txt.old"
+IncBin Logo, "src/extern/logo.txt"
 IncBin HelpText, "src/extern/help.txt"
 IncBin LicenseText, "src/extern/license.txt"
 IncBin CommandsText, "src/extern/cmd.txt"

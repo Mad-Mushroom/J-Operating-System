@@ -7,3 +7,4 @@ clear - clear the screen
 help - display help
 cmd - display this
 license - display license of the OS
+info - display infos in a 'neofetch-style'

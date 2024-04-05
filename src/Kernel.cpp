@@ -15,20 +15,11 @@ void init(){
 	PrintString("\nInitialized IDT.");
 	MainKeyboardHandler = KeyboardHandler;
 	PrintString("\nInitialized Keyboard Handler.");
-	//InitializeHeap(0x100000, 0x100000);
+	InitializeHeap(0x100000, 0x100000);
 	PrintString("Initialized Heap.");
-	initShell();
+	Shell_Init();
 	PrintString("\nInitialized Shell.");
 	PrintString("\nDone Initializing.\n\n");
-}
-
-void StartScreen(){
-	ClearScreen();
-	Shell_DrawBackground();
-	PrintString(Logo);
-	PrintString(OS_VERSION);
-	PrintString("\nCopyright (c) 2024 MadMushroom\n\n");
-    //PrintString("\n----------------------------------------\n");
 }
 
 void shutdown(){
@@ -43,7 +34,8 @@ void shutdown(){
 
 extern "C" void _start() {
 	init();
-	StartScreen();
-	RunShell();
+	Shell_Clear();
+	Shell_Output(Logo);
+	Shell_Run();
 	return;
 }
