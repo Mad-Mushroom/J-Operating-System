@@ -87,17 +87,17 @@ void ParseCommand(){
         return;
     }
     if(strcmp(arguments[0], "dpanic")){
-        kpanic(arguments[1]);
+        kpanic("DEBUGGING.\n\nUser-triggered Kernel Panic, no real Error :)\nBut how do you know about this command?");
         Shell_bufferSize = 0; memset(arguments, 0, sizeof(arguments));
         return;
     }
     if(strcmp(arguments[0], "derr")){
-        ncErr(arguments[1]);
+        ncErr("DEBUGGING.\n\nUser-triggered Error, no real Error :)\nBut how do you know about this command?");
         Shell_bufferSize = 0; memset(arguments, 0, sizeof(arguments));
         return;
     }
 
-    PrintString("Command or Binary not recognized!\n");
+    if(arguments[0] != "") PrintString("Command or Binary not recognized!\n");
     Shell_bufferSize = 0; memset(arguments, 0, sizeof(arguments));
     return;
 }

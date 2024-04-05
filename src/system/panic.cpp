@@ -55,12 +55,20 @@ void kpanic(const char* msg){
   poutb(0x3D5, (uint_8)(0 & 0xFF));
   poutb(0x3D4, 0x0E);
   poutb(0x3D5, (uint_8)((0 >> 8) & 0xFF));
+  pCursorPosition = 8 * pVGA_WIDTH;
+  for(int i=8; i<pVGA_HEIGHT; i++) pPrintString(":( :( :( :( :( :( :( :( :( :( :( :( :( :( :( :( :( :( :( :( :( :( :( :( :( :( :(", 0x40 | 0x0C);
 
-  pPrintString("KERNEL PANIC :(\n\n");
+  pCursorPosition = 0;
+
+  pPrintString(KPanicASCII);
   pPrintString("Details:\n");
   pPrintString(msg);
   pCursorPosition = pVGA_WIDTH * (pVGA_HEIGHT - 1);
-  pPrintString("System halted.");
+  pPrintString("System halted.", 0x40 | 0x0E);
+  poutb(0x3D4, 0x0F);
+  poutb(0x3D5, (uint_8)(pVGA_WIDTH*pVGA_HEIGHT & 0xFF));
+  poutb(0x3D4, 0x0E);
+  poutb(0x3D5, (uint_8)((pVGA_WIDTH*pVGA_HEIGHT >> 8) & 0xFF));
 
   for(;;) asm("hlt");
 }

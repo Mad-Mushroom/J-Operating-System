@@ -7,6 +7,7 @@ extern const char HelpText[];
 extern const char LicenseText[];
 extern const char CommandsText[];
 extern const char BackgroundASCII[];
+extern const char KPanicASCII[];
 
 #define OS_VERSION "J Operating System Alpha [v0.1.0]"
 

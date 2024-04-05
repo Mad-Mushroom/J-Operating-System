@@ -5,6 +5,7 @@ extern const char HelpText[];
 extern const char LicenseText[];
 extern const char CommandsText[];
 extern const char BackgroundASCII[];
+extern const char KPanicASCII[];
 
 void init(){
 	ClearScreen(BACKGROUND_BLACK | FOREGROUND_WHITE);

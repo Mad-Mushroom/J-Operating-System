@@ -17,4 +17,4 @@ PrintString:
 	ret
 
 BootString:
-	db 'Loading OpenOS...', 0
+	db 'BOOTING JOS...', 0
