@@ -1,8 +1,3 @@
-- Timing
-    - Uptime
-    - PIT
-- Sound
-    - PC Speaker
 - Storage
     - FDC (Floppy Disks)
     - ATA (Harddisks)

@@ -11,3 +11,4 @@
 |  $$$$$$/
  \______/
 
+Copyright (c) 2024 MadMushroom

@@ -103,11 +103,13 @@ void Shell_ParseCommand(){
         Shell_Output("dpanic - trigger kernel panic\n");
         Shell_Output("derr - trigger non-critical system error\n");
         Shell_Output("ucmd - display this\n");
-        Shell_Output("dlastcmos - display last time read from rtc");
+        Shell_Output("dlastcmos - display last time read from rtc\n");
+        Shell_Output("sound - plays sound on pc speaker (1st argument = frequency)\n");
+        Shell_Output("stopsound - stops the sound\n");
         Shell_bufferSize = 0; memset(arguments, 0, sizeof(arguments));
         return;
     }
-    if(strcmp(arguments[0], "playsound")){
+    if(strcmp(arguments[0], "sound")){
         PCSpeaker_PlaySound(stringToInt(arguments[1]));
         Shell_bufferSize = 0; memset(arguments, 0, sizeof(arguments));
         return;
