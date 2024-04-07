@@ -1,0 +1,19 @@
+- Timing
+    - CMOS Time
+    - Uptime
+    - PIT
+- Sound
+    - PC Speaker
+- Storage
+    - FDC (Floppy Disks)
+    - ATA (Harddisks)
+    - ATAPI (CD-ROM)
+    - AHCI (SATA)
+- File Systems
+    - FAT32
+    - Ext2
+- Other
+    - Executables
+    - Graphics Mode
+    - Standard Librarys
+    - jGL (j graphics library)

@@ -9,6 +9,7 @@ extern const char CommandsText[];
 extern const char BackgroundASCII[];
 extern const char KPanicASCII[];
 
+#define OS_DEBUG 0
 #define OS_VERSION "J Operating System Alpha [v0.1.0]    " // always 36 chars long!
 #define OS_VERSION_SHORT "Alpha [v0.1.0]"
 #define OS_BUILD_DATE "Sat, Apr 6. 2024"
@@ -26,6 +27,7 @@ extern const char KPanicASCII[];
 #include "system/memory/MemoryMap.cpp"
 #include "system/memory/memory.cpp"
 #include "system/memory/heap.cpp"
+#include "system/timing/cmos.cpp"
 
 /* Driver */
 #include "driver/VGA_Screen.cpp"

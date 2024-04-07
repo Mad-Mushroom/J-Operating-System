@@ -95,6 +95,7 @@ void Shell_ParseCommand(){
         Shell_Output("dpanic - trigger kernel panic\n");
         Shell_Output("derr - trigger non-critical system error\n");
         Shell_Output("ucmd - display this\n");
+        Shell_Output("dlastcmos - display last time read from rtc");
         Shell_bufferSize = 0; memset(arguments, 0, sizeof(arguments));
         return;
     }
@@ -104,14 +105,15 @@ void Shell_ParseCommand(){
         return;
     }
     if(strcmp(arguments[0], "info") || strcmp(arguments[0], "neofetch")){
+        read_rtc();
         Shell_Output("\n");
         Shell_Output("            /$$$$$$   /$$$$$$     "); Shell_Output("OS: The J Operating System"); Shell_Output("\n");
         Shell_Output("           /$$__  $$ /$$__  $$    "); Shell_Output("Kernel: jKern - jOS"); Shell_Output("\n");
         Shell_Output("       /$$| $$  \\ $$| $$  \\__/    "); Shell_Output("Version: "); Shell_Output(OS_VERSION);
         Shell_Output("      |__/| $$  | $$|  $$$$$$     "); Shell_Output("Build Date: "); Shell_Output(OS_BUILD_DATE); Shell_Output("\n");
-        Shell_Output("       /$$| $$  | $$ \\____  $$    "); Shell_Output("Memory: "); Shell_Output("\n");
+        Shell_Output("       /$$| $$  | $$ \\____  $$    "); Shell_Output("Memory: "); Shell_Output(IntegerToString(TotalMemoryLength / 1000)); Shell_Output("k / "); Shell_Output(IntegerToString(TotalMemoryLength / 1000000)); Shell_Output("M"); Shell_Output("\n");
         Shell_Output("      | $$| $$  | $$ /$$  \\ $$    "); Shell_Output("Uptime: "); Shell_Output("\n");
-        Shell_Output("      | $$|  $$$$$$/|  $$$$$$/    "); Shell_Output("CMOS Time: "); Shell_Output("\n");
+        Shell_Output("      | $$|  $$$$$$/|  $$$$$$/    "); Shell_Output("CMOS Time: "); Shell_Output(IntegerToString(month)); Shell_Output("/"); Shell_Output(IntegerToString(day)); Shell_Output("/"); Shell_Output(IntegerToString(year)); Shell_Output(" "); Shell_Output(IntegerToString(hour)); Shell_Output(":"); Shell_Output(IntegerToString(minute)); Shell_Output(":"); Shell_Output(IntegerToString(second)); Shell_Output("\n");
         Shell_Output("      | $$ \\______/  \\______/     "); Shell_Output("Shell: "); Shell_Output(SHELL_VERSION); Shell_Output("\n");
         Shell_Output(" /$$  | $$                        "); Shell_Output("Resolution: "); Shell_Output(IntegerToString(VGA_WIDTH)); Shell_Output("x"); Shell_Output(IntegerToString(VGA_HEIGHT)); Shell_Output(""); Shell_Output("\n");
         Shell_Output("|  $$$$$$/                        "); Shell_Output("  ", 0x00 | BACKGROUND_BLACK);Shell_Output("  ", 0x00 | BACKGROUND_BLUE);Shell_Output("  ", 0x00 | BACKGROUND_GREEN);Shell_Output("  ", 0x00 | BACKGROUND_CYAN);Shell_Output("  ", 0x00 | BACKGROUND_RED);Shell_Output("  ", 0x00 | BACKGROUND_MAGENTA);Shell_Output("  ", 0x00 | BACKGROUND_BROWN);Shell_Output("  ", 0x00 | BACKGROUND_LIGHTGRAY);Shell_Output("\n");
@@ -123,6 +125,11 @@ void Shell_ParseCommand(){
         Shell_Output(Logo);
         Shell_bufferSize = 0; memset(arguments, 0, sizeof(arguments));
         return;
+    }
+    if(strcmp(arguments[0], "time")){
+        read_rtc();
+        Shell_Output(IntegerToString(month)); Shell_Output("/"); Shell_Output(IntegerToString(day)); Shell_Output("/"); Shell_Output(IntegerToString(year)); Shell_Output(" "); Shell_Output(IntegerToString(hour)); Shell_Output(":"); Shell_Output(IntegerToString(minute)); Shell_Output(":"); Shell_Output(IntegerToString(second));
+        Shell_bufferSize = 0; memset(arguments, 0, sizeof(arguments));
     }
 
     /* DEBUG */
@@ -153,6 +160,10 @@ void Shell_ParseCommand(){
         ncErr("DEBUGGING.\n\nUser-triggered Error, no real Error :)\nBut how do you know about this command?");
         Shell_bufferSize = 0; memset(arguments, 0, sizeof(arguments));
         return;
+    }
+    if(strcmp(arguments[0], "dlastcmos")){
+        Shell_Output(IntegerToString(month)); Shell_Output("/"); Shell_Output(IntegerToString(day)); Shell_Output("/"); Shell_Output(IntegerToString(year)); Shell_Output(" "); Shell_Output(IntegerToString(hour)); Shell_Output(":"); Shell_Output(IntegerToString(minute)); Shell_Output(":"); Shell_Output(IntegerToString(second));
+        Shell_bufferSize = 0; memset(arguments, 0, sizeof(arguments));
     }
 
     if(Shell_bufferSize != 0) Shell_Output("Command or Binary not recognized!\n");

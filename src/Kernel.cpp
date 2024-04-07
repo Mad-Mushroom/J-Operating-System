@@ -34,8 +34,11 @@ void shutdown(){
 
 extern "C" void _start() {
 	init();
-	Shell_Clear();
-	Shell_Output(Logo);
+	if(OS_DEBUG == 0){
+		Shell_Clear();
+		Shell_Output(Logo);
+	}
+	read_rtc();
 	Shell_Run();
 	return;
 }
