@@ -12,7 +12,7 @@ extern const char KPanicASCII[];
 #define OS_DEBUG 0
 #define OS_VERSION "J Operating System Alpha [v0.1.0]    " // always 36 chars long!
 #define OS_VERSION_SHORT "Alpha [v0.1.0]"
-#define OS_BUILD_DATE "Sat, Apr 6. 2024"
+#define OS_BUILD_DATE "Sat, Apr 7. 2024"
 
 /* Misc */
 #include "misc/KBScanCodeSet1.h"
@@ -28,6 +28,8 @@ extern const char KPanicASCII[];
 #include "system/memory/memory.cpp"
 #include "system/memory/heap.cpp"
 #include "system/timing/cmos.cpp"
+//#include "system/timing/pit.cpp"
+#include "system/audio/pc_speaker.cpp"
 
 /* Driver */
 #include "driver/VGA_Screen.cpp"

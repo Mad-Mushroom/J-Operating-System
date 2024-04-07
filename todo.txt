@@ -1,5 +1,4 @@
 - Timing
-    - CMOS Time
     - Uptime
     - PIT
 - Sound

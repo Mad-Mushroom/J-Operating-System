@@ -19,6 +19,14 @@ void poutb(unsigned short port, unsigned char val){
   asm volatile ("outb %0, %1" : : "a"(val), "Nd"(port));
 }
 
+unsigned char pinb(unsigned short port){
+  unsigned char returnVal;
+  asm volatile ("inb %1, %0"
+  : "=a"(returnVal)
+  : "Nd"(port));
+  return returnVal;
+}
+
 void pPrintString(const char* str, uint_8 color = 0x40 | 0x0F){
   uint_8* charPtr = (uint_8*)str;
   uint_16 index = pCursorPosition;
@@ -70,7 +78,20 @@ void kpanic(const char* msg){
   poutb(0x3D4, 0x0E);
   poutb(0x3D5, (uint_8)((pVGA_WIDTH*pVGA_HEIGHT >> 8) & 0xFF));
 
-  for(;;) asm("hlt");
+  uint_32 Div;
+ 	uint_8 tmp;
+
+ 	Div = 1193180 / 500;
+ 	poutb(0x43, 0xb6);
+ 	poutb(0x42, (uint_8) (Div) );
+ 	poutb(0x42, (uint_8) (Div >> 8));
+ 
+ 	tmp = pinb(0x61);
+  	if (tmp != (tmp | 3)) {
+ 		poutb(0x61, tmp | 3);
+ 	}
+
+  while(true) asm("hlt");
 }
 
 void ncErr(const char* msg){

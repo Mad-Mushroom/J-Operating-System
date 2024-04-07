@@ -10,16 +10,19 @@ extern const char KPanicASCII[];
 void init(){
 	ClearScreen(BACKGROUND_BLACK | FOREGROUND_WHITE);
 	SetCursorPosition(0);
-	PrintString("Starting J Operating System...\n", BACKGROUND_BLACK | FOREGROUND_WHITE);
+	//PrintString("Starting J Operating System...\n", BACKGROUND_BLACK | FOREGROUND_WHITE);
 	InitializeIDT();
-	PrintString("\nInitialized IDT.");
+	if(OS_DEBUG == 1) PrintString("\nInitialized IDT.");
 	MainKeyboardHandler = KeyboardHandler;
-	PrintString("\nInitialized Keyboard Handler.");
+	if(OS_DEBUG == 1) PrintString("\nInitialized Keyboard Handler.");
 	InitializeHeap(0x100000, 0x100000);
-	PrintString("Initialized Heap.");
+	GetUsableMemoryRegions();
+	if(OS_DEBUG == 1) PrintString("Initialized Heap.");
 	Shell_Init();
-	PrintString("\nInitialized Shell.");
-	PrintString("\nDone Initializing.\n\n");
+	if(OS_DEBUG == 1) PrintString("\nInitialized Shell.");
+	read_rtc();
+	if(OS_DEBUG == 1) PrintString("\nInitialized CMOS.");
+	if(OS_DEBUG == 1) PrintString("\nDone Initializing.\n\n");
 }
 
 void shutdown(){
@@ -32,13 +35,29 @@ void shutdown(){
 	while(true) asm("hlt");
 }
 
-extern "C" void _start() {
+extern "C" void _start(){
 	init();
+	PrintString("Starting J Operating System...");
+	PCSpeaker_Beep(500, 1); ClearScreen();
 	if(OS_DEBUG == 0){
 		Shell_Clear();
 		Shell_Output(Logo);
 	}
-	read_rtc();
 	Shell_Run();
+	read_rtc();
+	uint_8 tmp = second;
+	uint_8 tmp2 = minute;
+	while(true){ // main kernel loop
+		read_rtc();
+        if(second == tmp + 1){
+            tmp = second;
+            OS_UPTIME++;
+			Shell_UpdateTitleBar();
+        }
+		if(minute == tmp2 + 1){
+			tmp2 = minute;
+			Shell_UpdateTitleBar();
+		}
+	}
 	return;
 }

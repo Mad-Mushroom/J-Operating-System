@@ -12,6 +12,8 @@ unsigned char hour;
 unsigned char day;
 unsigned char month;
 unsigned int year;
+
+uint_32 OS_UPTIME;
  
 enum{
       cmos_address = 0x70,
@@ -97,4 +99,17 @@ void read_rtc(){
             year += (CURRENT_YEAR / 100) * 100;
             if(year < CURRENT_YEAR) year += 100;
       }
+}
+
+void FakePIT_WaitSeconds(uint_32 seconds){
+    read_rtc();
+    uint_32 done = false;
+    uint_32 is = second;
+    while(!done){
+        read_rtc();
+        if(second == is + seconds){
+            done = true;
+            return;
+        }
+    }
 }

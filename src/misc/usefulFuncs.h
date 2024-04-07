@@ -33,6 +33,28 @@ void strcat2(char* destination, const char* source){
     *destination = '\0';
 }
 
+int stringToInt(const char* str) {
+    int result = 0;
+    int sign = 1;
+    int i = 0;
+
+    if (str[0] == '-') {
+        sign = -1;
+        i = 1;
+    }
+
+    for (; str[i] != '\0'; ++i) {
+        if (str[i] >= '0' && str[i] <= '9') {
+            result = result * 10 + (str[i] - '0');
+        } else {
+            break;
+        }
+    }
+
+    result *= sign;
+    return result;
+}
+
 /*const char* strcat(const char* str1, const char* str2) {
     int len1 = 0;
     while (str1[len1] != '\0') {
