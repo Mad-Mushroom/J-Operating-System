@@ -42,6 +42,7 @@ void Shell_UpdateTitleBar(){
     SetCursorPosition(0);
     PrintString(OS_VERSION, BACKGROUND_BLUE | FOREGROUND_YELLOW);
     PrintString("                                      ", BACKGROUND_BLUE | FOREGROUND_YELLOW);
+    read_rtc();
     PrintString(IntegerToString(hour), BACKGROUND_BLUE | FOREGROUND_YELLOW); PrintString(":", BACKGROUND_BLUE | FOREGROUND_YELLOW); PrintString(IntegerToString(minute), BACKGROUND_BLUE | FOREGROUND_YELLOW);
     SetCursorPosition(oCursorPosition);
 }
@@ -186,6 +187,11 @@ void Shell_ParseCommand(){
         Shell_bufferSize = 0; memset(arguments, 0, sizeof(arguments));
         return;
     }
+    if(strcmp(arguments[0], "thermo")){
+        Shell_Output("1. Thermodynamisches Gesetz:\n\nEnergie kann weder Uebertragen, noch umgewandelt werden. Sie wird entweder erzeugt, oder vernichtet.");
+        Shell_bufferSize = 0; memset(arguments, 0, sizeof(arguments));
+        return;
+    }
 
     if(Shell_bufferSize != 0) Shell_Output("Command or Binary not recognized!\n");
     Shell_bufferSize = 0; memset(arguments, 0, sizeof(arguments));
@@ -217,7 +223,7 @@ void Shell_KeyPress(uint_8 scanCode, uint_8 chr){
 			Shell_RightShiftPressed = false;
 			break;
 		case 0x9C: //Enter
-			PrintString("\n");
+			//PrintString("\n");
             Shell_Clear();
             Shell_ParseCommand();
             Shell_Run();

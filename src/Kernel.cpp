@@ -52,7 +52,6 @@ extern "C" void _start(){
         if(second == tmp + 1){
             tmp = second;
             OS_UPTIME++;
-			Shell_UpdateTitleBar();
         }
 		if(minute == tmp2 + 1){
 			tmp2 = minute;
