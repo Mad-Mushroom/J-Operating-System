@@ -2,7 +2,7 @@
 
 #include "../Kernel.h"
 
-#define SHELL_VERSION "jShell [v0.2.4]"
+#define SHELL_VERSION "jShell [v0.2.7]"
 
 bool Shell_LeftShiftPressed = false;
 bool Shell_RightShiftPressed = false;

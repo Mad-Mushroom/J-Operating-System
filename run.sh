@@ -8,4 +8,7 @@ x86_64-elf-ld -T"src/link.ld"
 
 cat bin/bootloader.bin bin/kernel.bin > bin/jOS.bin
 
-qemu-system-x86_64 -drive format=raw,file="bin/jOS.bin",index=0,if=floppy,  -m 128M -audiodev coreaudio,id=audio0 -machine pcspk-audiodev=audio0
+dd if=/dev/zero of=bin/jos_formated.bin bs=512 count=2440 >/dev/null
+dd if=bin/jOS.bin of=bin/jos_formated.bin conv=notrunc >/dev/null
+
+qemu-system-x86_64 -drive format=raw,file="bin/jos_formated.bin",index=0,if=floppy,  -m 128M -audiodev coreaudio,id=audio0 -machine pcspk-audiodev=audio0

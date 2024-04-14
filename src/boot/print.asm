@@ -17,4 +17,4 @@ PrintString:
 	ret
 
 BootString:
-	db 'BOOTING JOS...', 0
+	db 'Booting jOS...', 0

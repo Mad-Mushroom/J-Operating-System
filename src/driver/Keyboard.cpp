@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../Kernel.h"
-#include "../shell/shell.cpp"
+#include "../jShell/shell.cpp"
 
 uint_8 LastScancode;
 

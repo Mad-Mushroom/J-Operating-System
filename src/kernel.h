@@ -36,4 +36,4 @@ extern const char KPanicASCII[];
 #include "driver/Keyboard.cpp"
 
 /* Shell */
-#include "shell/shell.cpp"
+#include "jShell/shell.cpp"
