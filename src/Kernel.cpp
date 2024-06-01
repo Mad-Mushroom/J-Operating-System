@@ -7,6 +7,8 @@ extern const char CommandsText[];
 extern const char BackgroundASCII[];
 extern const char KPanicASCII[];
 
+int K_OS_State = 0;
+
 void init(){
 	ClearScreen(BACKGROUND_BLACK | FOREGROUND_WHITE);
 	SetCursorPosition(0);
@@ -35,27 +37,79 @@ void shutdown(){
 	while(true) asm("hlt");
 }
 
+void startup(){
+	ClearScreen();
+	PrintString("== J Operating System ==\n\n");
+	PrintString("F1 - Cancel & Shutdown\n");
+	PrintString("F2 - Enter Shell (Normal Mode)\n");
+	PrintString("F3 - Enter Shell (Graphics Mode)\n");
+	PrintString("F4 - Enter Graphics Mode\n\n");
+	PrintString("F6 - Start Shell (Safe Mode)\n");
+	PrintString("F7 - Start Fallback Shell\n");
+	PrintString("F8 - Start Setup\n");
+	SetCursorPosition(VGA_HEIGHT*VGA_WIDTH);
+}
+
+void startup_key(unsigned char scanCode, unsigned char chr){
+	if (chr == 0) {
+        switch (scanCode) {
+			case 0x3B: // F1
+				shutdown();
+				break;
+			case 0x3C: // F2
+				Shell_Clear();
+				Shell_Output(Logo);
+				Shell_Run();
+				read_rtc();
+				K_OS_State = 2;
+			case 0x3D: // F3
+				ClearScreen();
+				PrintString("Under development.");
+				for(;;) asm("hlt");
+			case 0x3E: // F4
+				ClearScreen();
+				PrintString("Under development.");
+				for(;;) asm("hlt");
+			case 0x40: // F6
+				ClearScreen();
+				PrintString("Under development.");
+				for(;;) asm("hlt");
+			case 0x41: // F7
+				ClearScreen();
+				PrintString("Under development.");
+				for(;;) asm("hlt");
+			case 0x42: // F8
+				ClearScreen();
+				PrintString("Under development.");
+				for(;;) asm("hlt");
+			case 0x9C: //Enter
+				Shell_Clear();
+				Shell_Output(Logo);
+				Shell_Run();
+				read_rtc();
+				K_OS_State = 2;
+		}
+	}
+}
+
 extern "C" void _start(){
 	init();
 	PrintString("Starting J Operating System...");
 	PCSpeaker_Beep(500, 1); ClearScreen();
-	if(OS_DEBUG == 0){
-		Shell_Clear();
-		Shell_Output(Logo);
-	}
-	Shell_Run();
-	read_rtc();
+	startup();
 	uint_8 tmp = second;
 	uint_8 tmp2 = minute;
 	while(true){ // main kernel loop
-		read_rtc();
-        if(second == tmp + 1){
-            tmp = second;
-            OS_UPTIME++;
-        }
-		if(minute == tmp2 + 1){
-			tmp2 = minute;
-			Shell_UpdateTitleBar();
+		if(K_OS_State > 1){
+			read_rtc();
+        	if(second == tmp + 1){
+            	tmp = second;
+            	OS_UPTIME++;
+        	}
+			if(minute == tmp2 + 1){
+				tmp2 = minute;
+				Shell_UpdateTitleBar();
+			}
 		}
 	}
 	return;

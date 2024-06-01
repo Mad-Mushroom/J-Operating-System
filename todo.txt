@@ -1,12 +1,12 @@
 - Storage
-    - FDC (Floppy Disks)
     - ATA (Harddisks)
-    - ATAPI (CD-ROM)
+    - ATAPI (CD-ROM), maybe done, aka: copy&paste
     - AHCI (SATA)
 - File Systems
     - FAT32
     - Ext2
 - Other
+    - rewrite bootloader
     - Executables
     - Graphics Mode
     - Standard Librarys

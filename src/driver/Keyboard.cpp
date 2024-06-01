@@ -12,7 +12,8 @@ void KeyboardHandler(uint_8 scanCode, uint_8 chr) {
 		//Shell_KeyPress0xE0(scanCode);
 		break;
 	default:
-		Shell_KeyPress(scanCode, chr);
+		if(K_OS_State == 0) startup_key(scanCode, chr);
+		if(K_OS_State == 2) Shell_KeyPress(scanCode, chr);
 	}
 
 	LastScancode = scanCode;

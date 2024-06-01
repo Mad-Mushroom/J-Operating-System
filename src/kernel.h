@@ -1,6 +1,7 @@
 #pragma once
 
 void shutdown();
+void startup_key(unsigned char scanCode, unsigned char chr);
 
 extern const char Logo[];
 extern const char HelpText[];
@@ -8,6 +9,7 @@ extern const char LicenseText[];
 extern const char CommandsText[];
 extern const char BackgroundASCII[];
 extern const char KPanicASCII[];
+extern int K_OS_State;
 
 #define OS_DEBUG 0
 #define OS_VERSION "J Operating System Alpha [v0.1.0]    " // always 36 chars long!
